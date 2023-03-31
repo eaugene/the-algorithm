@@ -63,9 +63,9 @@ public class HnswIndex<T, Q> {
 
   private final RandomProvider randomProvider;
 
-  // Probability of reevaluating connections of an element in the neighborhood during an update
+  // Probability of reevaluating connections of an element in the neighbourhood during an update
   // Can be used as a knob to adjust update_speed/search_speed tradeoff.
-  private final float updateNeighborProbability;
+  private final float updateNeighbourProbability;
 
   /**
    * Creates instance of hnsw index.
@@ -74,7 +74,7 @@ public class HnswIndex<T, Q> {
    * @param distFnQuery      Any distance metric/non metric that specifies similarity between item for which nearest neighbours queried for and already indexed item.
    * @param efConstruction   Provide speed vs index quality tradeoff, higher the value better the quality and higher the time to create index.
    *                         Valid range of efConstruction can be anywhere between 1 and tens of thousand. Typically, it should be set so that a search of M
-   *                         neighbors with ef=efConstruction should end in recall>0.95.
+   *                         neighbours with ef=efConstruction should end in recall>0.95.
    * @param maxM             Maximum connections per layer except 0th level.
    *                         Optimal values between 5-48.
    *                         Smaller M generally produces better result for lower recalls and/ or lower dimensional data,
@@ -122,7 +122,7 @@ public class HnswIndex<T, Q> {
     this.globalLock = new ReentrantLock();
     this.lockProvider = key -> new ReentrantReadWriteLock();
     this.randomProvider = randomProvider;
-    this.updateNeighborProbability = 1.0f;
+    this.updateNeighbourProbability = 1.0f;
   }
 
   /**
@@ -268,7 +268,7 @@ public class HnswIndex<T, Q> {
 
       for (T elOneHop : listOneHop) {
         setCand.add(elOneHop);
-        if (randomProvider.get().nextFloat() > updateNeighborProbability) {
+        if (randomProvider.get().nextFloat() > updateNeighbourProbability) {
           continue;
         }
         setNeigh.add(elOneHop);
@@ -379,7 +379,7 @@ public class HnswIndex<T, Q> {
    * This will reduce the recall.
    * <p>
    * For a full explanation of locking see this document: http://go/hnsw-locking
-   * The method returns the closest nearest neighbor (can be used as an enter point)
+   * The method returns the closest nearest neighbour (can be used as an enter point)
    */
   private T mutuallyConnectNewElement(
       final T item,
@@ -405,7 +405,7 @@ public class HnswIndex<T, Q> {
         final boolean isItemAlreadyPresent =
             isUpdate && connections.indexOf(item) != -1 ? true : false;
 
-        // If `item` is already present in the neighboring connections,
+        // If `item` is already present in the neighbouring connections,
         // then no need to modify any connections or run the search heuristics.
         if (isItemAlreadyPresent) {
           continue;
